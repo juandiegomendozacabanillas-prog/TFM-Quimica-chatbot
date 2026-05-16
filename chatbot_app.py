@@ -19,14 +19,15 @@ clave_gemini = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 if clave_gemini:
     os.environ["GEMINI_API_KEY"] = clave_gemini
 
-# --- 2. CONFIGURACIÓN DE LOS "MOTORES" DE IA ---
-# Búsqueda local con HuggingFace (Vectores, gratuito y rapido) 
+# --- 2. CONFIGURACIÓN DE LOS "MOTORES" DE IA (Embedding y LLM) ---
+# Búsqueda local con HuggingFace (Vectores)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-# Motor de respuesta Gemini 1.5 Flash (Configuración oficial para entornos Linux/Nube)
+# Motor de respuesta Gemini 1.5 Flash (Configuración robusta para producción)
 if clave_gemini:
+    # Inicializamos el modelo pasando la clave directamente al constructor nativo
     Settings.llm = Gemini(
-        model="models/gemini-1.5-flash", 
+        model="models/gemini-1.5-flash",
         api_key=clave_gemini
     )
 else:
