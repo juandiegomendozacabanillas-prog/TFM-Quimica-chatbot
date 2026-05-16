@@ -26,20 +26,17 @@ else:
 # Búsqueda local con HuggingFace (Vectores)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-# Bloque de Diagnóstico Seguro para comprobar la API Key en la pantalla de Streamlit
+# Configuración del motor de respuesta mediante el SDK oficial de Google
 if clave_gemini:
-    clave_limpia = clave_gemini.strip()
-    # Mostramos datos de control en la app para ver qué está leyendo el servidor
-    st.info(f"🔍 [INFO DE CONTROL] Longitud de la clave detectada: {len(clave_limpia)} caracteres.")
-    st.info(f"🔍 [INFO DE CONTROL] La clave empieza por: '{clave_limpia[:6]}' y termina por: '{clave_limpia[-4:]}'")
+    # Bloque de Diagnóstico Seguro (Verás que ahora marcará 38 porque está limpia)
+    st.info(f"🔍 [INFO DE CONTROL] Longitud de la clave limpia: {len(clave_gemini)} caracteres.")
     
     import google.generativeai as genai
-    genai.configure(api_key=clave_limpia)
-    os.environ["GEMINI_API_KEY"] = clave_limpia
+    genai.configure(api_key=clave_gemini)
     
     Settings.llm = Gemini(
         model="models/gemini-1.5-flash",
-        api_key=clave_limpia
+        api_key=clave_gemini
     )
 else:
     st.error("⚠️ Error: No se ha detectado la clave API (GEMINI_API_KEY) en los Secrets.")
