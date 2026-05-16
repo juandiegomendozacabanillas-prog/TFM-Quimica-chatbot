@@ -4,18 +4,18 @@ import time
 from dotenv import load_dotenv
 from llama_index.core import StorageContext, load_index_from_storage, PromptTemplate
 from llama_index.core.settings import Settings
-# ATENCIÓN: Cambiamos la ruta de importación a la oficial y moderna de LlamaIndex para Google
-from llama_index.llms.google import GoogleGenAI 
+from llama_index.llms.gemini import Gemini
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 # --- 1. CARGA DE CONFIGURACIÓN ---
-os.environ["TOKENIZERS_PARALLELISM"] = "false" # Desactiva el aviso de paralelismo
+os.environ["TOKENIZERS_PARALLELISM"] = "false" # Desactiva el aviso de paralelismo de HuggingFace
 load_dotenv()
 STORAGE_DIR = "./storage"
 
 # Prioridad 1: Secrets de Streamlit (Nube) | Prioridad 2: Archivo .env (Local)
 clave_bruta = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
+# Limpieza estricta de la clave para evitar caracteres ocultos del servidor
 if clave_bruta:
     clave_gemini = clave_bruta.strip()
     os.environ["GEMINI_API_KEY"] = clave_gemini
@@ -26,15 +26,18 @@ else:
 # Búsqueda local con HuggingFace (Vectores)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-# Configuración del motor de respuesta mediante GoogleGenAI (Evita el bug del NotFound)
+# Configuración del motor de respuesta mediante el SDK de Google Gemini
 if clave_gemini:
-    # Usamos GoogleGenAI que ataca directamente a la API moderna sin validaciones previas que fallen
-    Settings.llm = GoogleGenAI(
+    import google.generativeai as genai
+    genai.configure(api_key=clave_gemini)
+    
+    # Inicialización estándar compatible con la versión core
+    Settings.llm = Gemini(
         model="models/gemini-1.5-flash",
         api_key=clave_gemini
     )
 else:
-    st.error("⚠️ Error: No se ha detectado la clave API (GEMINI_API_KEY) en los Secrets.")
+    st.error("⚠️ Error: No se ha detectado la clave API (GEMINI_API_KEY) inyectada.")
     st.stop()
 
 # --- 3. DEFINICIÓN DE LA PERSONALIDAD (Prompt) ---
@@ -107,6 +110,6 @@ if prompt := st.chat_input("Escribe tu duda..."):
                 if "429" in error_msg:
                     st.error("⚠️ Cuota diaria de la API agotada (Máximo 20 interacciones).")
                 elif "index out of range" in error_msg.lower():
-                    st.error("⚠️ El asistente no encontró suficiente información en los apuntes para responder a eso.")
+                    st.error("⚠️ El asistente no encontró suficiente información en los apuntes.")
                 else:
                     st.error(f"Error de conexión: {error_msg}")
