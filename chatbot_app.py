@@ -23,32 +23,21 @@ if clave_gemini:
 # Búsqueda local con HuggingFace (Vectores)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-# Configuración del motor de respuesta mediante el SDK oficial de Google
+# Bloque de Diagnóstico Seguro para comprobar la API Key en la pantalla de Streamlit
 if clave_gemini:
-    import google.generativeai as genai
-    
-    # Limpiamos posibles espacios o saltos de línea invisibles
     clave_limpia = clave_gemini.strip()
+    # Mostramos datos de control en la app para ver qué está leyendo el servidor
+    st.info(f"🔍 [INFO DE CONTROL] Longitud de la clave detectada: {len(clave_limpia)} caracteres.")
+    st.info(f"🔍 [INFO DE CONTROL] La clave empieza por: '{clave_limpia[:6]}' y termina por: '{clave_limpia[-4:]}'")
     
-    # Configuramos la clave a nivel de sistema de Google obligatoriamente
+    import google.generativeai as genai
     genai.configure(api_key=clave_limpia)
     os.environ["GEMINI_API_KEY"] = clave_limpia
     
-    # Inicialización del modelo saltándonos la validación automática del SDK
-    # Usamos la clase base para evitar que LlamaIndex llame a genai.get_model()
     Settings.llm = Gemini(
         model="models/gemini-1.5-flash",
-        api_key=clave_limpia,
-        temperature=0.7
+        api_key=clave_limpia
     )
-    
-    # TRUCO MÁGICO: Forzamos a LlamaIndex a creer que el modelo ya está validado
-    # Esto evita que se ejecute la línea 167 del traceback que está rompiendo todo
-    try:
-        Settings.llm._model_meta = None
-    except:
-        pass
-        
 else:
     st.error("⚠️ Error: No se ha detectado la clave API (GEMINI_API_KEY) en los Secrets.")
     st.stop()
