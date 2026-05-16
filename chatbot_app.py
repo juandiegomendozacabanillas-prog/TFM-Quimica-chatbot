@@ -11,7 +11,14 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding # Para veloc
 # --- 1. CARGA DE CONFIGURACIÓN ---
 load_dotenv()
 STORAGE_DIR = "./storage"
-clave_gemini = os.getenv("GEMINI_API_KEY")
+## clave_gemini = os.getenv("GEMINI_API_KEY")
+
+# Prioridad 1: Secrets de Streamlit (Nube) | Prioridad 2: Archivo .env (Local)
+clave_gemini = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+
+if not clave_gemini:
+    st.error("⚠️ Error: No se ha configurado la clave API de Gemini.")
+    st.stop()
 
 # --- 2. CONFIGURACIÓN DE LOS "MOTORES" DE IA --- MOTOR DE BÚSQUEDA (Embedding)
 # Búsqueda local con HuggingFace (Gratuito y rápido)
