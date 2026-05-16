@@ -26,14 +26,15 @@ Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 # Configuración del motor de respuesta mediante el SDK oficial de Google
 if clave_gemini:
     import google.generativeai as genai
-    
+
+    clave_limpia = clave_gemini.strip()
     # Configuramos la clave a nivel de sistema de Google obligatoriamente
-    genai.configure(api_key=clave_gemini)
+    genai.configure(api_key=clave_limpia)
+    os.environ["GEMINI_API_KEY"] = clave_limpia
     
     # Inicialización del modelo con el parámetro limpio y estandarizado
     Settings.llm = Gemini(
-        model_name="models/gemini-1.5-flash",
-        api_key=clave_gemini
+        model_name="models/gemini-1.5-flash"
     )
 else:
     st.error("⚠️ Error: No se ha detectado la clave API (GEMINI_API_KEY) en los Secrets.")
