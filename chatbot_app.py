@@ -35,7 +35,7 @@ if clave_gemini:
     genai.configure(api_key=clave_gemini)
     
     Settings.llm = Gemini(
-        model="models/gemini-1.5-flash",
+        model="gemini-1.5-flash",
         api_key=clave_gemini
     )
 else:
