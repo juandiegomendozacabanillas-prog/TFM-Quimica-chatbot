@@ -29,8 +29,8 @@ Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 # Motor de respuesta Gemini 2.5 Flash (Estable)
 Settings.llm = Gemini(
     model="models/gemini-2.5-flash", 
-    api_key=clave_gemini,
-    transport="rest" 
+    api_key=clave_gemini
+    # transport="rest" 
 )
 
 # --- 3. DEFINICIÓN DE LA PERSONALIDAD (Prompt) , Aquñi definimos cómo se comporta el profesor---
