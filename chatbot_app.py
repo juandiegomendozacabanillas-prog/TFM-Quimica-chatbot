@@ -27,11 +27,15 @@ if not clave_gemini:
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 # Motor de respuesta Gemini 2.5 Flash (Estable)
-Settings.llm = Gemini(
-    model="models/gemini-2.5-flash", 
-    api_key=clave_gemini
-    # transport="rest" 
-)
+if clave_gemini:
+    Settings.llm = Gemini(
+        model="gemini-1.5-flash", 
+        api_key=clave_gemini
+        # transport="rest" 
+    )
+else:
+st.error("⚠️ La clave API (GEMINI_API_KEY) está vacía o no se lee correctamente.")
+st.stop()
 
 # --- 3. DEFINICIÓN DE LA PERSONALIDAD (Prompt) , Aquñi definimos cómo se comporta el profesor---
 template = (
