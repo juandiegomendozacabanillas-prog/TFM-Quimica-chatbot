@@ -4,8 +4,8 @@ import time
 from dotenv import load_dotenv
 from llama_index.core import StorageContext, load_index_from_storage, PromptTemplate
 from llama_index.core.settings import Settings
-# ATENCIÓN: Cambiamos 'Gemini' por 'GoogleGenAI' que usa el endpoint moderno y estable
-from llama_index.llms.gemini import GoogleGenAI 
+# ATENCIÓN: Cambiamos la ruta de importación a la oficial y moderna de LlamaIndex para Google
+from llama_index.llms.google import GoogleGenAI 
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 # --- 1. CARGA DE CONFIGURACIÓN ---
