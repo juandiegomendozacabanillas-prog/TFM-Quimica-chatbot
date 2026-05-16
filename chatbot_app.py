@@ -23,9 +23,11 @@ if clave_gemini:
 # Búsqueda local con HuggingFace (Vectores)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-# Motor de respuesta Gemini 1.5 Flash (Configuración robusta para producción)
+# Configuración del motor de respuesta Gemini 1.5 Flash
 if clave_gemini:
-    # Inicializamos el modelo pasando la clave directamente al constructor nativo
+    import google.generativeai as genai
+    genai.configure(api_key=clave_gemini) # Configura la clave a nivel global en el SDK de Google
+    
     Settings.llm = Gemini(
         model="models/gemini-1.5-flash",
         api_key=clave_gemini
