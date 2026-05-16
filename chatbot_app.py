@@ -4,7 +4,7 @@ import time
 from dotenv import load_dotenv
 from llama_index.core import StorageContext, load_index_from_storage, PromptTemplate
 from llama_index.core.settings import Settings
-from llama_index.llms.gemini import Gemini 
+from llama_index.llms.gemini import Gemini
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 # --- 1. CARGA DE CONFIGURACIÓN ---
@@ -23,11 +23,14 @@ if clave_gemini:
 # Búsqueda local con HuggingFace (Vectores)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-# Configuración del motor de respuesta Gemini 1.5 Flash
+# Configuración del motor de respuesta mediante el SDK oficial de Google
 if clave_gemini:
     import google.generativeai as genai
-    genai.configure(api_key=clave_gemini) # Configura la clave a nivel global en el SDK de Google
     
+    # Configuramos la clave a nivel de sistema de Google obligatoriamente
+    genai.configure(api_key=clave_gemini)
+    
+    # Inicialización del modelo con el parámetro limpio y estandarizado
     Settings.llm = Gemini(
         model="models/gemini-1.5-flash",
         api_key=clave_gemini
