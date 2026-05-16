@@ -13,11 +13,14 @@ load_dotenv()
 STORAGE_DIR = "./storage"
 
 # Prioridad 1: Secrets de Streamlit (Nube) | Prioridad 2: Archivo .env (Local)
-clave_gemini = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+clave_bruta = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-# Sincroniza la clave con el entorno global del servidor de forma segura
-if clave_gemini:
+# SOLUCIÓN AL CARÁCTER FANTASMA: Limpiamos saltos de línea (\n) o espacios que meta Streamlit
+if clave_bruta:
+    clave_gemini = clave_bruta.strip()
     os.environ["GEMINI_API_KEY"] = clave_gemini
+else:
+    clave_gemini = None
 
 # --- 2. CONFIGURACIÓN DE LOS "MOTORES" DE IA (Embedding y LLM) ---
 # Búsqueda local con HuggingFace (Vectores)
