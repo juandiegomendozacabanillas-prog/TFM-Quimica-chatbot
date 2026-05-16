@@ -31,12 +31,11 @@ if clave_gemini:
     Settings.llm = Gemini(
         model="gemini-1.5-flash", 
         api_key=clave_gemini
-        # transport="rest" 
     )
 else:
-st.error("⚠️ La clave API (GEMINI_API_KEY) está vacía o no se lee correctamente.")
-st.stop()
-
+    st.error("⚠️ La clave API (GEMINI_API_KEY) está vacía o no se lee correctamente.")
+    st.stop()
+    
 # --- 3. DEFINICIÓN DE LA PERSONALIDAD (Prompt) , Aquñi definimos cómo se comporta el profesor---
 template = (
     "Eres un profesor experto en Química del Bachillerato Internacional (BI).\n"
