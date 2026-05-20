@@ -23,12 +23,13 @@ else:
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 if clave_gemini:
-    # Atacamos la API de Gemini usando la pasarela compatible con formato OpenAI
-    # Esto evita el bug de validación remota (genai.get_model) que bloqueaba Linux
+    # Atacamos la API de Gemini usando la pasarela compatible de OpenAI
+    # Forzamos la url base exacta y activamos el flag de chat model para que la librería monte la ruta perfecta
     Settings.llm = OpenAILike(
         model="gemini-1.5-flash",
         api_key=clave_gemini,
-        api_base="https://generativelanguage.googleapis.com/v1beta",
+        api_base="https://generativelanguage.googleapis.com/v1beta/openai",
+        is_chat_model=True,
         temperature=0.7
     )
 else:
