@@ -1,6 +1,5 @@
 streamlit
 llama-index-core
-llama-index-llms-gemini
+llama-index-llms-openai-like
 llama-index-embeddings-huggingface
-google-generativeai
 python-dotenv
