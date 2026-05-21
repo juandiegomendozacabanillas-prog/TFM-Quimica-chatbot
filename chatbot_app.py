@@ -77,7 +77,7 @@ if prompt := st.chat_input("Escribe tu duda..."):
                 texto_instrucciones = f"{PROMPT_SISTEMA}\n\nCONTEXTO DE LOS APUNTES:\n{contexto_apuntes}"
                 
                 # 3. Llamada directa vía REST API a la versión estable de Google
-                url_api = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key={clave_gemini}"
+                url_api = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={clave_gemini}"
                 
                 headers = {"Content-Type": "application/json"}
                 payload = {
