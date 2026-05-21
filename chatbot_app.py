@@ -9,6 +9,8 @@ import google.generativeai as genai
 
 # --- 1. CARGA DE CONFIGURACIÓN ---
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# TRUCO MAESTRO: Obligamos al SDK de Google a usar la API estable v1 en lugar de v1beta
+os.environ["API_VERSION"] = "v1" 
 load_dotenv()
 STORAGE_DIR = "./storage"
 
