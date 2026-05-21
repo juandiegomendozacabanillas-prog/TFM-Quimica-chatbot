@@ -80,7 +80,7 @@ if prompt := st.chat_input("Escribe tu duda..."):
                 prompt_final = f"{PROMPT_SISTEMA}\n\nCONTEXTO DE LOS APUNTES:\n{contexto_apuntes}\n\nPREGUNTA DEL ALUMNO: {prompt}\n\nRESPUESTA DEL PROFESOR:"
                 
                 # 3. LLamada directa usando el SDK oficial de Google (Inmune a bugs de LlamaIndex)
-                model = genai.GenerativeModel("gemini-1.5-flash")
+                model = genai.GenerativeModel("gemini-1.5-flash-latest")
                 response = model.generate_content(prompt_final)
                 texto_final = response.text
                 
